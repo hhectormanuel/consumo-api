@@ -4,8 +4,6 @@ defmodule ConsumoApiWeb.Index do
 
   def render(assigns) do
     ~H"""
-
-    <%= link "Welcome Page!", to: Routes.page_url(@socket, :index, []) %>
     <form phx-submit="submit">
       <ul>
         <li>

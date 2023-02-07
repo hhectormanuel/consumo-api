@@ -14,6 +14,14 @@ defmodule ConsumoApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/api" do
+    pipe_through :api
+    forward "", Absinthe.Plug.GraphiQL,
+    schema: ConsumoApiWeb.Schema.AbsintheSmsVoiceData,
+    interface: :simple,
+    context: %{pubsub: ConsumoApiWeb.Endpoint}
+  end
+
   # scope "/", ConsumoApiWeb do
   #   pipe_through :browser
 
@@ -22,7 +30,7 @@ defmodule ConsumoApiWeb.Router do
   # end
 
   # Other scopes may use custom stacks.
-  scope "/api", ConsumoApiWeb do
+  scope "/api2", ConsumoApiWeb do
     pipe_through :api
 
     # resources "/items", ItemController, only: [:index, :show]
@@ -30,6 +38,8 @@ defmodule ConsumoApiWeb.Router do
     post "/url", ItemController, :url_post
     # get "/file", ItemController, :file
     post "/file", ItemController, :file_post
+    get "/file", ItemController, :file_get
+    get "/file_test", ItemController, :file_get_test
   end
 
   # Enables LiveDashboard only for development

@@ -51,6 +51,8 @@ defmodule ConsumoApi.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:httpotion, "~> 3.1.0"},
       {:poison, "~> 5.0"},
+      {:absinthe, "~> 1.6"},
+      {:absinthe_plug, "~> 1.5"}
       # {:csv_converter, git: "https://github.com/hhectormanuel/csv-converter.git"}
     ]
   end
