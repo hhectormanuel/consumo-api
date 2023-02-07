@@ -2,7 +2,7 @@ defmodule ConsumoApiWeb.Resolvers.CommonResolver do
   alias ConsumoApiWeb.Helpers.FilesPath
   alias ConsumoApiWeb.Helpers.SftpConn
 
-  @today FilesPath.get_today_date()
+  @today "#{FilesPath.get_today_date()}/"
 
   def all_files(_root, _args, _info) do
     case FilesPath.get_files_prueba([

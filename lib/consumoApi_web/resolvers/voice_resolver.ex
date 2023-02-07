@@ -2,7 +2,8 @@ defmodule ConsumoApiWeb.Resolvers.VoiceResolver do
   alias ConsumoApiWeb.Helpers.FilesPath
   alias ConsumoApiWeb.Helpers.SftpConn
 
-  @today FilesPath.get_today_date()
+  @today "#{FilesPath.get_today_date()}/"
+  @path "/efs_sftp_altan/195/cdrs/bss-cbs_voice/"
 
   def all_voice(_root, _args, _info) do
     {:ok, FilesPath.get_files_prueba([
@@ -11,9 +12,8 @@ defmodule ConsumoApiWeb.Resolvers.VoiceResolver do
   end
 
   def all_voice_real2(_root, _args, _info) do
-    path = "/efs_sftp_altan/195/cdrs/bss-cbs_voice/#{@today}"
     conn = SftpConn.connection()
-    paths = SftpConn.get_files(conn, path)
+    paths = SftpConn.get_files(conn, @path <> @today)
     case SftpConn.read_files(conn, paths) do
       {:error, error} -> {:error, error}
       files -> {:ok, files}
@@ -67,9 +67,8 @@ defmodule ConsumoApiWeb.Resolvers.VoiceResolver do
   end
 
   def find_by_date_real2(_parent, %{date: date}, _resolution) do
-    path = "/efs_sftp_altan/195/cdrs/bss-cbs_voice/#{date}"
     conn = SftpConn.connection()
-    paths = SftpConn.get_files(conn, path)
+    paths = SftpConn.get_files(conn, @path <> "#{date}/")
     case SftpConn.read_files(conn, paths) do
       {:error, error} -> {:error, error}
       files -> {:ok, files}
