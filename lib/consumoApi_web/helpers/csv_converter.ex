@@ -1,7 +1,7 @@
 defmodule ConsumoApiWeb.Helpers.CsvConverter do
   import ConsumoApiWeb.Helpers.FindFiles
 
-  defp convert_csv(content, sep, has_columns, type) do
+  def convert_csv(content, sep, has_columns, type) do
     {:ok, agent} = Agent.start_link(fn -> [] end)
     {columns, data} = get_columns_data(content, sep, has_columns, type)
     Enum.each(data, fn x -> add_data(columns, x, agent) end)

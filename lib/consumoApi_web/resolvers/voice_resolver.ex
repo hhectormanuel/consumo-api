@@ -1,5 +1,8 @@
 defmodule ConsumoApiWeb.Resolvers.VoiceResolver do
   alias ConsumoApiWeb.Helpers.FilesPath
+  alias ConsumoApiWeb.Helpers.SftpConn
+
+  @today FilesPath.get_today_date()
 
   def all_voice(_root, _args, _info) do
     {:ok, FilesPath.get_files_prueba([
@@ -7,9 +10,19 @@ defmodule ConsumoApiWeb.Resolvers.VoiceResolver do
       "/home/hector/Desktop/docs/bss-cbs_voice/voice2.add"], ["|", false])}
   end
 
-  def all_voice_real(_root, _args, _info) do
-    {:ok, FilesPath.get_data("voice", ["|", false], FilesPath.get_today_date())}
+  def all_voice_real2(_root, _args, _info) do
+    path = "/efs_sftp_altan/195/cdrs/bss-cbs_voice/#{@today}"
+    conn = SftpConn.connection()
+    paths = SftpConn.get_files(conn, path)
+    case SftpConn.read_files(conn, paths) do
+      {:error, error} -> {:error, error}
+      files -> {:ok, files}
+    end
   end
+
+  # def all_voice_real(_root, _args, _info) do
+  #   {:ok, FilesPath.get_data("voice", ["|", false], FilesPath.get_today_date())}
+  # end
 
   def find_cdr_id(_parent, %{cdr_id: cdr_id}, _resolution) do
     condition =
@@ -50,6 +63,16 @@ defmodule ConsumoApiWeb.Resolvers.VoiceResolver do
         {:error, "Files by date #{date} not found"}
       files ->
         {:ok, files}
+    end
+  end
+
+  def find_by_date_real2(_parent, %{date: date}, _resolution) do
+    path = "/efs_sftp_altan/195/cdrs/bss-cbs_voice/#{date}"
+    conn = SftpConn.connection()
+    paths = SftpConn.get_files(conn, path)
+    case SftpConn.read_files(conn, paths) do
+      {:error, error} -> {:error, error}
+      files -> {:ok, files}
     end
   end
 

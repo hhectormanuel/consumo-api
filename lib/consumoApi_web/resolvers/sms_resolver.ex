@@ -1,5 +1,8 @@
 defmodule ConsumoApiWeb.Resolvers.SmsResolver do
   alias ConsumoApiWeb.Helpers.FilesPath
+  alias ConsumoApiWeb.Helpers.SftpConn
+
+  @today FilesPath.get_today_date()
 
   def all_sms(_root, _args, _info) do
     IO.inspect FilesPath.get_data("sms", ["|", false], FilesPath.get_today_date())
@@ -8,6 +11,16 @@ defmodule ConsumoApiWeb.Resolvers.SmsResolver do
 
   def all_sms_real(_root, _args, _info) do
     {:ok, FilesPath.get_data("sms", ["|", false], FilesPath.get_today_date())}
+  end
+
+  def all_sms_real2(_root, _args, _info) do
+    path = "/efs_sftp_altan/195/cdrs/bss-cbs_sms/#{@today}"
+    conn = SftpConn.connection()
+    paths = SftpConn.get_files(conn, path)
+    case SftpConn.read_files(conn, paths) do
+      {:error, error} -> {:error, error}
+      files -> {:ok, files}
+    end
   end
 
   def find_by_date(_parent, %{cdr_batch_id: cdr_batch_id}, _resolution) do
@@ -22,5 +35,16 @@ defmodule ConsumoApiWeb.Resolvers.SmsResolver do
         {:ok, file}
     end
   end
+
+  def find_by_date_real2(_parent, %{date: date}, _resolution) do
+    path = "/efs_sftp_altan/195/cdrs/bss-cbs_sms/#{date}"
+    conn = SftpConn.connection()
+    paths = SftpConn.get_files(conn, path)
+    case SftpConn.read_files(conn, paths) do
+      {:error, error} -> {:error, error}
+      files -> {:ok, files}
+    end
+  end
+
 
 end

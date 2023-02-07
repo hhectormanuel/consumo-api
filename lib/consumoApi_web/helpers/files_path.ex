@@ -45,22 +45,6 @@ defmodule ConsumoApiWeb.Helpers.FilesPath do
     Agent.get(agent, fn list -> list end)
   end
 
-
-
-  # def get_data(date \\ get_today_date(), type \\ ["sms", "voice", "data"], [sep, space, has_columns]) do
-  #   date
-  #   |> default_path(type)
-  #   |> find_folders()
-  #   # |> search_in_files("!123")
-  # end
-
-  # def get_data2(date \\ get_today_date(), type \\ ["sms", "voice", "data"], [sep, space, has_columns]) do
-  #   date
-  #   |> default_path(type)
-  #   # |> find_folders()
-  #   |> all_files_data(sep, space, has_columns, type)
-  # end
-
   def get_data244(type \\ ["sms", "voice", "data"], [sep, has_columns], date \\ get_today_date()) do
     date
     |> default_path(type)
@@ -104,7 +88,7 @@ defmodule ConsumoApiWeb.Helpers.FilesPath do
     |> List.flatten()
   end
 
-  defp get_type_from_path(path) do
+  def get_type_from_path(path) do
     path = String.split(path, "/")
     cond do
       "bss-cbs_sms" in path -> ["sms"]
@@ -116,10 +100,11 @@ defmodule ConsumoApiWeb.Helpers.FilesPath do
   def all_files_data([], _sep, _has_columns), do: []
 
   def all_files_data(paths, sep, has_columns) do
-    Agent.start_link(fn  -> [] end)
+    # Agent.start_link(fn  -> [] end)
     Enum.reduce(paths, [], fn path, acc ->
       CsvConverter.read_csv_from_file(path, sep, has_columns, get_type_from_path(path)) ++ acc
     end)
     |> List.flatten()
   end
+
 end

@@ -52,7 +52,8 @@ defmodule ConsumoApi.MixProject do
       {:httpotion, "~> 3.1.0"},
       {:poison, "~> 5.0"},
       {:absinthe, "~> 1.6"},
-      {:absinthe_plug, "~> 1.5"}
+      {:absinthe_plug, "~> 1.5"},
+      {:sftp_client, "~> 1.4"}
       # {:csv_converter, git: "https://github.com/hhectormanuel/csv-converter.git"}
     ]
   end
