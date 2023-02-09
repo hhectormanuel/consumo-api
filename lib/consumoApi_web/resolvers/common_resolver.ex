@@ -4,7 +4,7 @@ defmodule ConsumoApiWeb.Resolvers.CommonResolver do
 
   @today "#{FilesPath.get_today_date()}/"
 
-  def all_files(_root, _args, _info) do
+  def all_files2(_root, _args, _info) do
     case FilesPath.get_files_prueba([
       "/home/hector/Desktop/docs/bss-cbs_voice/voice.add",
       "/home/hector/Desktop/docs/bss-cbs_voice/voice2.add",
@@ -15,7 +15,7 @@ defmodule ConsumoApiWeb.Resolvers.CommonResolver do
     end
   end
 
-  def all_files_real2(_root, _args, _info) do
+  def all_files(_root, _args, _info) do
     paths =
       ["voice", "sms", "data"]
       |> Enum.map(fn type -> "/efs_sftp_altan/195/cdrs/bss-cbs_#{type}/#{@today}" end)
@@ -34,7 +34,7 @@ defmodule ConsumoApiWeb.Resolvers.CommonResolver do
     end
   end
 
-  def find_by_date(_parent, %{cdr_batch_id: cdr_batch_id}, _resolution) do
+  def find_by_date2(_parent, %{cdr_batch_id: cdr_batch_id}, _resolution) do
     condition =
       FilesPath.get_data("all", ["|", false], @today)
       |> Enum.find(nil, fn map ->
@@ -58,7 +58,7 @@ defmodule ConsumoApiWeb.Resolvers.CommonResolver do
     end
   end
 
-  def find_by_date_real2(_parent, %{date: date}, _resolution) do
+  def find_by_date(_parent, %{date: date}, _resolution) do
     paths =
       ["voice", "sms", "data"]
       |> Enum.map(fn type -> "/efs_sftp_altan/195/cdrs/bss-cbs_#{type}/#{date}/" end)
